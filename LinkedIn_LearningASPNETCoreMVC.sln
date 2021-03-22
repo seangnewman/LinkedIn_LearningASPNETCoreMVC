@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExploreCalifornia", "LinkedIn_LearningASPNETCoreMVC\ExploreCalifornia.csproj", "{C8C84B7A-9A8B-483E-8850-7275918BFEC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8C84B7A-9A8B-483E-8850-7275918BFEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C84B7A-9A8B-483E-8850-7275918BFEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C84B7A-9A8B-483E-8850-7275918BFEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C84B7A-9A8B-483E-8850-7275918BFEC0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B94E4E2E-3C65-41DA-BCF9-75951716A1DD}
+	EndGlobalSection
+EndGlobal
