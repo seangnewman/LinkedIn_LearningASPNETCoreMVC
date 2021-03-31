@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ExploreCalifornia.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +32,11 @@ namespace ExploreCalifornia
                 return new FeatureToggles { DeveloperExceptions = _configuration.GetValue<bool>("FeatureToggles:DeveloperExceptions") };
             });
 
+
+            services.AddDbContext<BlogDataContext>(options => {
+                var connectionString = _configuration.GetConnectionString("BlogDataContext");
+                options.UseSqlServer(connectionString);
+            } );
             services.AddMvc();
         }
 
@@ -36,13 +44,13 @@ namespace ExploreCalifornia
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, FeatureToggles features)
         {
             #region handling and diagnostics
-            app.UseExceptionHandler("/error.html");
+            // app.UseExceptionHandler("/error.html");
             #endregion
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             #region DependencyInjection
             //if (_configuration.GetValue<bool>("FeatureToggles:EnableDeveloperExceptions"))
@@ -50,10 +58,10 @@ namespace ExploreCalifornia
             //    app.UseDeveloperExceptionPage();
             //}
 
-            if (features.DeveloperExceptions)
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            //if (features.DeveloperExceptions)
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
             #endregion
 
             #region Respond to HTTP Requests
