@@ -1,16 +1,11 @@
 ﻿using ExploreCalifornia.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ExploreCalifornia
 {
@@ -28,17 +23,34 @@ namespace ExploreCalifornia
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<FeatureToggles>( x => {
+            services.AddTransient<FeatureToggles>(x =>
+            {
                 return new FeatureToggles { DeveloperExceptions = _configuration.GetValue<bool>("FeatureToggles:DeveloperExceptions") };
             });
 
+            services.AddTransient<FormattingService>();
 
-            services.AddDbContext<BlogDataContext>(options => {
+            services.AddDbContext<BlogDataContext>(options =>
+            {
                 var connectionString = _configuration.GetConnectionString("BlogDataContext");
                 options.UseSqlServer(connectionString);
-            } );
+            });
+
+            services.AddDbContext<IdentityDataContext>(options =>
+            {
+                var connectionString = _configuration.GetConnectionString("IdentityDataContext");
+                options.UseSqlServer(connectionString);
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                                                .AddEntityFrameworkStores<IdentityDataContext>();
+
+            
             services.AddMvc();
         }
+
+        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, FeatureToggles features)
@@ -88,7 +100,7 @@ namespace ExploreCalifornia
             #region Error handling and diagnostics demo
             app.Use(async (context, next) =>
             {
-                               
+
                 if (context.Request.Path.Value.Contains("invalid"))
                 {
                     throw new Exception("ERROR!");
@@ -99,13 +111,17 @@ namespace ExploreCalifornia
 
             #endregion
 
+            // Use Identity services
+           // app.UseIdentity();
+
             #region Customize Application URL's
-            app.UseMvc( routes => {
+            app.UseMvc(routes =>
+            {
                 routes.MapRoute("Default",
                                              "{controller=Home}/{action=Index}/{id?}");
             });
 
-            
+
 
             #endregion
             #region Serving Static Files
@@ -114,7 +130,7 @@ namespace ExploreCalifornia
             app.UseFileServer();
             #endregion
 
-           
+
 
         }
     }
